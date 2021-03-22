@@ -1,7 +1,6 @@
 import PhonebookContact from "./Components/PhonebookContacts/phonebookContacts";
 import PhonebookForm from "./Components/PhonebookForm/phonebookForm";
 import styles from "./App.module.css";
-import { connect } from "react-redux";
 
 const App = function () {
   return (
@@ -13,10 +12,4 @@ const App = function () {
   );
 };
 
-const mapStateToProps = (state) => ({
-  contacts: state.contacts.items,
-});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

@@ -83,8 +83,6 @@ class PhonebookContact extends Component {
 const mapStateToProps = (state) => ({
   contacts: selectors.getContacts(state),
   filter: selectors.getFilterValue(state),
-  // contacts: state.contacts.items,
-  // filter: state.contacts.filter,
 });
 
 const mapDispatchToProps = (dispatch) => {
