@@ -10,16 +10,7 @@ class PhonebookContact extends Component {
   componentDidMount() {
     this.props.fetchContact();
   }
-  filterContacts = () => {
-    const { filter, contacts } = this.props;
-    const filtred = contacts.filter((contact) => {
-      if (contact.name.toLowerCase().includes(filter.toLocaleLowerCase())) {
-        return contact;
-      }
-      return null;
-    });
-    return filtred;
-  };
+  filterContacts = () => this.props.filterContacts;
   handleInputChange = (event) => {
     this.props.changeFilter(event.target.value);
     this.filterContacts();
@@ -83,6 +74,7 @@ class PhonebookContact extends Component {
 const mapStateToProps = (state) => ({
   contacts: selectors.getContacts(state),
   filter: selectors.getFilterValue(state),
+  filterContacts: selectors.getFilteredContacts(state),
 });
 
 const mapDispatchToProps = (dispatch) => {
