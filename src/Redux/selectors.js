@@ -1,4 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit";
+const getIsAuthentification = (state) =>
+  state.auth.token; /*поменять название на getUserToken*/
+const getIsAuth = (state) => state.auth.isAuthentificated;
+const getUserName = (state) => state.auth.user.name;
 const getContacts = (state) => state.contacts.items;
 const getFilterValue = (state) => state.contacts.filter;
 const getFilteredContacts = createSelector(
@@ -10,5 +14,12 @@ const getFilteredContacts = createSelector(
   }
 );
 
-const selectors = { getContacts, getFilterValue, getFilteredContacts };
+const selectors = {
+  getContacts,
+  getFilterValue,
+  getFilteredContacts,
+  getIsAuthentification,
+  getUserName,
+  getIsAuth,
+};
 export default selectors;

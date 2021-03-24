@@ -10,6 +10,7 @@ class PhonebookContact extends Component {
   componentDidMount() {
     this.props.fetchContact();
   }
+
   filterContacts = () => this.props.filterContacts;
   handleInputChange = (event) => {
     this.props.changeFilter(event.target.value);
@@ -72,6 +73,7 @@ class PhonebookContact extends Component {
   }
 }
 const mapStateToProps = (state) => ({
+  IsAuth: selectors.getIsAuth(state),
   contacts: selectors.getContacts(state),
   filter: selectors.getFilterValue(state),
   filterContacts: selectors.getFilteredContacts(state),

@@ -11,7 +11,7 @@ import {
   fetchContactError,
 } from "../Redux/Contacts/contacts-actions";
 
-axios.defaults.baseURL = "http://localhost:4040";
+axios.defaults.baseURL = "https://goit-phonebook-api.herokuapp.com";
 
 export const addContact = ({ name, number, id }) => (dispatch) => {
   const contact = {
@@ -34,12 +34,15 @@ export const deleteContact = (id) => (dispatch) => {
     .catch((error) => dispatch(deleteContactError(error)));
 };
 
-export const fetchContact = () => (dispatch) => {
+export const fetchContact = () => (dispatch, getState) => {
   dispatch(fetchContactRequest());
+  axios.defaults.headers.common.Authorization = `Bearer ${
+    getState().auth.token
+  }`;
   axios
     .get("/contacts")
     .then(({ data }) => dispatch(fetchContactSuccess(data)))
-    .catch((error) => dispatch(fetchContactError(error)));
+    .catch((error) => dispatch(fetchContactError(error.message)));
 };
 const operations = { addContact, deleteContact, fetchContact };
 export default operations;

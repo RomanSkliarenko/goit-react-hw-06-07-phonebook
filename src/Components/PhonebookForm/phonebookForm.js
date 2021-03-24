@@ -50,27 +50,30 @@ class PhonebookForm extends Component {
   };
   render() {
     return (
-      <form onSubmit={this.formSubmit} className={styles.form}>
-        <label className={styles.label}>
-          Name
-          <input
-            name="name"
-            type="text"
-            onChange={this.handleInputChange}
-            value={this.state.name}
-          />
-        </label>
-        <label className={styles.label}>
-          Number
-          <input
-            name="number"
-            type="number"
-            onChange={this.handleInputChange}
-            value={this.state.number}
-          />
-        </label>
-        <button type="submit">Add contact</button>
-      </form>
+      <>
+        <h1>Phonebook</h1>
+        <form onSubmit={this.formSubmit} className={styles.form}>
+          <label className={styles.label}>
+            Name
+            <input
+              name="name"
+              type="text"
+              onChange={this.handleInputChange}
+              value={this.state.name}
+            />
+          </label>
+          <label className={styles.label}>
+            Number
+            <input
+              name="number"
+              type="number"
+              onChange={this.handleInputChange}
+              value={this.state.number}
+            />
+          </label>
+          <button type="submit">Add contact</button>
+        </form>
+      </>
     );
   }
 }
