@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { register } from "../../Redux/Auth/auth-operations";
 
 const styles = {
@@ -25,67 +25,77 @@ const styles = {
   },
 };
 
-class LoginPage extends Component {
-  state = {
-    name: "",
-    email: "",
-    password: "",
-  };
-  handleChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
-  };
-  handleSubmit = (event) => {
+export default function RegisterPage() {
+  const dispatch = useDispatch();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleSubmit = (event) => {
     event.preventDefault();
-    this.props.register(this.state);
-    this.setState({ name: "", email: "", password: "" });
+    dispatch(register({ name, email, password }));
+    setPassword("");
+    setEmail("");
+    setName("");
   };
-  render() {
-    const { email, password, name } = this.state;
-    return (
-      <div style={styles.registerWrapper}>
-        <h2>Введите Ваши данные</h2>
-        <form onSubmit={this.handleSubmit} style={styles.form}>
-          <label style={styles.label}>
-            Имя
-            <input
-              style={styles.input}
-              type="name"
-              name="name"
-              value={name}
-              required
-              onChange={this.handleChange}
-            />
-          </label>
-          <label style={styles.label}>
-            Почта
-            <input
-              style={styles.input}
-              type="email"
-              name="email"
-              value={email}
-              onChange={this.handleChange}
-              required
-            />
-          </label>
-          <label style={styles.label}>
-            Пароль
-            <input
-              style={styles.input}
-              type="password"
-              name="password"
-              value={password}
-              required
-              onChange={this.handleChange}
-            />
-          </label>
-          <button type="submit">Регистрация</button>
-        </form>
-      </div>
-    );
-  }
-}
+  const updateCredentials = (event) => {
+    event.preventDefault();
+    switch (event.target.name) {
+      case "name":
+        setName(event.target.value);
+        break;
+      case "email":
+        setEmail(event.target.value);
+        break;
+      case "password":
+        setPassword(event.target.value);
+        break;
 
-const mapDispatchToProps = {
-  register,
-};
-export default connect(null, mapDispatchToProps)(LoginPage);
+      default:
+        break;
+    }
+  };
+  return (
+    <div style={styles.registerWrapper}>
+      <h2>Введите Ваши данные</h2>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <label style={styles.label}>
+          Имя
+          <input
+            style={styles.input}
+            type="name"
+            name="name"
+            value={name}
+            required
+            onChange={updateCredentials}
+            autoComplete="off"
+          />
+        </label>
+        <label style={styles.label}>
+          Почта
+          <input
+            style={styles.input}
+            type="email"
+            name="email"
+            value={email}
+            onChange={updateCredentials}
+            required
+            autoComplete="off"
+          />
+        </label>
+        <label style={styles.label}>
+          Пароль
+          <input
+            style={styles.input}
+            type="password"
+            name="password"
+            value={password}
+            required
+            onChange={updateCredentials}
+            autoComplete="off"
+          />
+        </label>
+        <button type="submit">Регистрация</button>
+      </form>
+    </div>
+  );
+}

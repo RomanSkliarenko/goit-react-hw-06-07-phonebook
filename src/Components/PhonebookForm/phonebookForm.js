@@ -1,33 +1,41 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import shortid from "shortid";
 import styles from "./phonebookForm.module.css";
-import { connect } from "react-redux";
 import { addContact } from "../../Operation/operation";
 import selectors from "../../Redux/selectors";
 
-class PhonebookForm extends Component {
-  state = {
-    name: "",
-    number: "",
-  };
+export default function PhonebookForm() {
+  const contacts = useSelector(selectors.getContacts);
+  const dispatch = useDispatch();
 
-  handleInputChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const updateCredentials = (event) => {
+    event.preventDefault();
+    switch (event.target.name) {
+      case "name":
+        setName(event.target.value);
+        break;
+      case "number":
+        setNumber(event.target.value);
+        break;
+      default:
+        break;
+    }
   };
-  formSubmit = (e) => {
+  const formReset = () => {
+    setNumber("");
+    setName("");
+  };
+  const formSubmit = (e) => {
     e.preventDefault();
-    const user = {
-      name: this.state.name,
-      number: this.state.number,
-      id: shortid.generate(),
-    };
-    const { name, number } = user;
-    const alredyInContacts = this.props.contacts.find((item) => {
+    const alredyInContacts = contacts.find((item) => {
       return item.name === name || item.number === number;
     });
     if (alredyInContacts) {
       alert("Такой контакт уже есть!");
-      this.formReset();
+      formReset();
       return;
     } else if (name === "") {
       alert("Введите имя для добавления!");
@@ -36,54 +44,45 @@ class PhonebookForm extends Component {
       alert("Введите номер для добавления!");
       return;
     } else if (name !== "" && number !== "") {
-      this.props.updateContacts(user);
-      this.formReset();
+      dispatch(
+        addContact({
+          name,
+          number,
+          id: shortid.generate(),
+        })
+      );
+      formReset();
       return;
     } else {
       alert("Что-то пошло не так :(");
-      this.formReset();
+      formReset();
       return;
     }
   };
-  formReset = () => {
-    this.setState({ name: "", number: "" });
-  };
-  render() {
-    return (
-      <>
-        <h1>Phonebook</h1>
-        <form onSubmit={this.formSubmit} className={styles.form}>
-          <label className={styles.label}>
-            Name
-            <input
-              name="name"
-              type="text"
-              onChange={this.handleInputChange}
-              value={this.state.name}
-            />
-          </label>
-          <label className={styles.label}>
-            Number
-            <input
-              name="number"
-              type="number"
-              onChange={this.handleInputChange}
-              value={this.state.number}
-            />
-          </label>
-          <button type="submit">Add contact</button>
-        </form>
-      </>
-    );
-  }
+  return (
+    <>
+      <h1>Phonebook</h1>
+      <form onSubmit={formSubmit} className={styles.form}>
+        <label className={styles.label}>
+          Name
+          <input
+            name="name"
+            type="text"
+            onChange={updateCredentials}
+            value={name}
+          />
+        </label>
+        <label className={styles.label}>
+          Number
+          <input
+            name="number"
+            type="number"
+            onChange={updateCredentials}
+            value={number}
+          />
+        </label>
+        <button type="submit">Add contact</button>
+      </form>
+    </>
+  );
 }
-const mapStateToProps = (state) => ({
-  contacts: selectors.getContacts(state),
-});
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    updateContacts: (value) => dispatch(addContact(value)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(PhonebookForm);

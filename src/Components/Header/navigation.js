@@ -1,35 +1,29 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import AuthNav from "./authNav";
 import UserMenu from "./userMenu";
 import selectors from "../../Redux/selectors";
 import styles from "../../App.module.css";
-class Navigation extends Component {
-  render() {
-    return (
-      <div className={styles.nav}>
-        <div>
-          {!this.props.isAuthentification && (
-            <NavLink to="/" exact>
-              Главная
-            </NavLink>
-          )}
-          {this.props.isAuthentification && (
-            <NavLink to="/main" exact>
-              Контакты
-            </NavLink>
-          )}
-        </div>
-        {this.props.isAuthentification ? <UserMenu /> : <AuthNav />}
+import { useSelector } from "react-redux";
+
+export default function Navigation() {
+  const isAuthentification = useSelector(selectors.getIsAuthentification);
+
+  return (
+    <div className={styles.nav}>
+      <div>
+        {!isAuthentification && (
+          <NavLink to="/" exact>
+            Главная
+          </NavLink>
+        )}
+        {isAuthentification && (
+          <NavLink to="/main" exact>
+            Контакты
+          </NavLink>
+        )}
       </div>
-    );
-  }
+      {isAuthentification ? <UserMenu /> : <AuthNav />}
+    </div>
+  );
 }
-const mapStateToProps = (state) => ({
-  isAuthentification: selectors.getIsAuthentification(state),
-});
-
-const mapDispatchToProps = {};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
